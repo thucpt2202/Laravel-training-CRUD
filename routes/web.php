@@ -2,6 +2,7 @@
 
 require __DIR__.'/auth.php';
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,12 +17,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');;
+
+Route::get('/', [UserController::class, 'index'])->name('dashboard');
+
+Route::get('/regist_user', function () {
+    return view('registUser');
+})->middleware(['auth', 'verified'])->name('regist_user');;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
