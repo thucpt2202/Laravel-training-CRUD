@@ -1,6 +1,7 @@
 <?php
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -16,20 +17,43 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');;
+// Welcome route
+Route::get('/welcome', function () {
+    return view('welcome');
+})->middleware(['auth', 'verified'])->name('welcome');;
 
-Route::get('/', [UserController::class, 'index'])->name('dashboard');
+// Dashboard route with middleware end user role
+Route::middleware(['auth', 'role:nuser', 'verified'])->group(function () {
+    Route::get('/end_user', function () {
+        return view('endUserDashboard');
+    })->name('end_user');
+});
 
+// Dashboard route with middleware admin role
+Route::middleware(['auth', 'role:admin', 'verified'])->group(function () {
+    Route::get('/', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    // Get all users
+    Route::get('/', [UserController::class, 'index'])->name('dashboard');
+});
+
+
+/**
+ * Admin routes
+ */
+
+// Regist user route
 Route::get('/regist_user', function () {
     return view('registUser');
 })->middleware(['auth', 'verified'])->name('regist_user');;
+
+// Destroy user route
+Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-require __DIR__.'/auth.php';

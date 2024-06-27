@@ -16,11 +16,13 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('regist_user')" :active="request()->routeIs('regist_user')">
-                        {{ __('Regist User') }}
-                    </x-nav-link>
-                </div>
+                @if(Auth::user()->role == 'admin') 
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('regist_user')" :active="request()->routeIs('regist_user')">
+                            {{ __('Regist User') }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->
