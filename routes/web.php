@@ -37,17 +37,16 @@ Route::middleware(['auth', 'role:admin', 'verified'])->group(function () {
 
     // Get all users
     Route::get('/', [UserController::class, 'index'])->name('dashboard');
+    // Regist user route
+    Route::get('/regist_user', function () {
+        return view('user.registUser');
+    })->name('regist_user');;
 });
 
 
 /**
  * Admin routes
  */
-
-// Regist user route
-Route::get('/regist_user', function () {
-    return view('registUser');
-})->middleware(['auth', 'verified'])->name('regist_user');;
 
 // Destroy user route
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
