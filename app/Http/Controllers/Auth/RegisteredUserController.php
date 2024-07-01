@@ -45,13 +45,8 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        $currentUser = Auth::user();
-
-        if(!$currentUser) {
-            Auth::login($user);
-            return redirect(RouteServiceProvider::END_USER);
-        }
-        toastr()->success('User has been created successfully!');
-        return redirect()->intended(RouteServiceProvider::HOME);
+        Auth::login($user);
+        return redirect(RouteServiceProvider::END_USER);
+       
     }
 }

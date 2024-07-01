@@ -30,26 +30,22 @@ Route::middleware(['auth', 'role:nuser', 'verified'])->group(function () {
 });
 
 // Dashboard route with middleware admin role
-Route::middleware(['auth', 'role:admin', 'verified'])->group(function () {
+Route::middleware(['auth', 'role:admin,oper', 'verified'])->group(function () {
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
-
     // Get all users
     Route::get('/', [UserController::class, 'index'])->name('dashboard');
     // Regist user route
     Route::get('/regist_user', function () {
         return view('user.registUser');
     })->name('regist_user');;
+    // Destroy user route
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    // Update user route
+    Route::put('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
 });
 
-
-/**
- * Admin routes
- */
-
-// Destroy user route
-Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
